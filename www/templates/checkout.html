@@ -1,0 +1,13 @@
+<ion-view view-title="Carrinho">
+  <ion-content>
+    <ion-list show-delete="true">
+      <ion-item ng-repeat="product in products track by product.id"
+            class="item-thumbnail-left">
+        <img ng-src="img/products/{{ product.image_name }}.gif">
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.excerpt }}</p>
+        <ion-delete-button class="ion-minus-circled" ng-click="removeItem(product.id)"></ion-delete-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

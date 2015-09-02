@@ -2,18 +2,21 @@ angular.module('cartExample.controllers', [])
 
 .controller('StoreCtrl', function($scope, Products, $localstorage) {
   var products = Products.all() || [];
-  var current = $localstorage.getArray('cart', []);
-  products.map(function (item) {
-    var filter = current.filter(function (cartItem) {
-      return cartItem.id === item.id;
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+    var current = $localstorage.getArray('cart', []);
+    products.map(function (item) {
+      var filter = current.filter(function (cartItem) {
+        return cartItem.id === item.id;
+      });
+
+      item.cart = !!filter.length;
+
+      return item;
     });
 
-    item.cart = !!filter.length;
-
-    return item;
+    $scope.products = products;
   });
-
-  $scope.products = products;
 
   $scope.cartExists = function (id) {
     var filter = current.filter(function (value) {
@@ -74,10 +77,22 @@ angular.module('cartExample.controllers', [])
       $localstorage.setObject('cart', current);
     }
   };
+
 })
 
-.controller('CheckoutCtrl', function($scope) {
+.controller('CheckoutCtrl', function($scope, $localstorage) {
+  $scope.$on('$ionicView.beforeEnter', function() {
+    $scope.products = $localstorage.getArray('cart', []);
+  });
+  $scope.removeItem = function (id) {
+    var current = $localstorage.getArray('cart', []);
+    var filtered = current.filter(function (value) {
+      return value.id != id;
+    });
 
+    $localstorage.setObject('cart', filtered);
+    $scope.products = filtered;
+  }
 })
 
 .controller('AccountCtrl', function($scope) {
