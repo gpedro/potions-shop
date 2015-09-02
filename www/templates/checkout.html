@@ -1,13 +1,26 @@
 <ion-view view-title="Carrinho">
   <ion-content>
-    <ion-list show-delete="true">
+    <ion-list can-swipe="true">
+      <ion-item ng-if="products.length === 0">
+        <h2 class="positive">Nenhum item no carrinho.</h2>
+      </ion-item>
       <ion-item ng-repeat="product in products track by product.id"
-            class="item-thumbnail-left">
-        <img ng-src="img/products/{{ product.image_name }}.gif">
-        <h2>{{ product.name }}</h2>
+            class="item-avatar">
+        <img ng-src="img/products/{{ product.image_name }}.gif" >
+        <h2>{{ product.quantity || 1 }}x {{ product.name }}</h2>
         <p>{{ product.excerpt }}</p>
-        <ion-delete-button class="ion-minus-circled" ng-click="removeItem(product.id)"></ion-delete-button>
+        <span class="badge badge-balanced">{{ ((product.quantity || 1) * product.price) || 0 }} gp</span>
+        <ion-option-button class="assertive ion-minus-circled" style="font-size:48px" ng-click="removeItem(product.id)"></ion-option-button>
+      </ion-item>
+
+      <ion-item>
+        Valor Total
+        <span class="badge badge-assertive">{{ getValorTotal() || 0 }} gp</span>
       </ion-item>
     </ion-list>
+    <div class="button-bar">
+      <a class="button button-assertive">Limpar Carrinho</a>
+      <a class="button button-balanced">Finalizar Pedido</a>
+    </div>
   </ion-content>
 </ion-view>

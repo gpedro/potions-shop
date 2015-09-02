@@ -84,6 +84,7 @@ angular.module('cartExample.controllers', [])
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.products = $localstorage.getArray('cart', []);
   });
+
   $scope.removeItem = function (id) {
     var current = $localstorage.getArray('cart', []);
     var filtered = current.filter(function (value) {
@@ -92,7 +93,17 @@ angular.module('cartExample.controllers', [])
 
     $localstorage.setObject('cart', filtered);
     $scope.products = filtered;
-  }
+  };
+
+  $scope.getValorTotal = function () {
+    var current = $localstorage.getArray('cart', []);
+    var valorTotal = 0;
+    current.forEach(function (value) {
+      valorTotal += (value.quantity * value.price);
+    });
+
+    return valorTotal;
+  };
 })
 
 .controller('AccountCtrl', function($scope) {
