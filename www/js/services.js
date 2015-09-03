@@ -1,5 +1,39 @@
 
 angular.module('cartExample.services', [])
+.factory('Accounts', function ($localstorage) {
+  var accounts = [{
+    id: 0,
+    name: 'Gabriel Pedro',
+    login: 'gpedro',
+    email: 'gpedro831@gmail.com',
+    password: 'jusolu'
+  }, {
+    id: 1,
+    name: 'Rayssa Monteiro',
+    login: 'rayssa',
+    email: 'rayssamonteiro92@gmail.com',
+    password: '666'
+  }];
+
+  return {
+    auth: function (username, password) {
+      var accs = accounts.filter(function (value) {
+        return value.login == username && value.password == password;
+      });
+
+      if (accs.length) {
+        var acc = accs[0];
+        delete acc.password;
+        $localstorage.setObject('session', acc);
+        $localstorage.set('logged', true);
+      }
+
+      console.log(accs);
+
+      return !!accs.length;
+    }
+  };
+})
 .factory('Products', function() {
 
   var potions = [{

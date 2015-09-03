@@ -80,10 +80,13 @@ angular.module('cartExample.controllers', [])
 
 })
 
-.controller('CheckoutCtrl', function($scope, $localstorage) {
+.controller('CheckoutCtrl', function($scope, $localstorage, $ionicPopup) {
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.products = $localstorage.getArray('cart', []);
   });
+
+  var isLogged = ($localstorage.get('logged', 'false') == 'true');
+  $scope.isLogged = isLogged;
 
   $scope.removeItem = function (id) {
     var current = $localstorage.getArray('cart', []);
@@ -99,13 +102,118 @@ angular.module('cartExample.controllers', [])
     var current = $localstorage.getArray('cart', []);
     var valorTotal = 0;
     current.forEach(function (value) {
-      valorTotal += (value.quantity * value.price);
+      valorTotal += ((value.quantity || 1) * value.price);
     });
 
     return valorTotal;
   };
+
+  $scope.limparCarrinho = function () {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Carrinho de Compras',
+      template: 'Você tem certeza que deseja limpar o carrinho?',
+      buttons: [
+        { text: 'Cancelar' },
+        { text: '<b>Limpar</b>',
+        type: 'button-assertive',
+        onTap: function(e) {
+          $localstorage.setObject('cart', []);
+          $scope.products = [];
+        }
+      }]
+    });
+  };
+
+  $scope.finalizarPedido = function () {
+    var current = $localstorage.getArray('cart', []);
+    if (!current.length) {
+      $ionicPopup.alert({
+       title: 'Carrinho Vazio',
+       template: 'Para finalizar o pedido é necessário possuir itens no carrinho.'
+     });
+      return;
+    }
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Finalizar Pedido',
+      template: 'Você já é nosso cliente? Faça login ou cadastre-se.',
+      buttons: [
+        { text: 'Entrar', type: 'button-positive',
+          onTap: function(e) {
+
+          }
+        },
+        { text: 'Cadastrar', type: 'button-balanced',
+        onTap: function(e) {
+
+        }
+      }]
+    });
+  };
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $localstorage, $ionicPopup, $window, $timeout, $ionicLoading, Accounts) {
 
+  var isLogged = ($localstorage.get('logged', 'false') == 'true');
+
+  if (isLogged) {
+    var account = $localstorage.getObject('session', {});
+    if (account.hasOwnProperty('id')) {
+      $scope.account = account;
+    }
+  }
+
+  $scope.login = {};
+  $scope.isLogged = isLogged;
+  $scope.entrar = function () {
+    var login = $ionicPopup.confirm({
+      title: 'Entrar',
+      subTitle: 'Digite seu usuário e senha',
+      template: '<input type="text" ng-model="login.username" placeholder="Usuário" required/><br><input required placeholder="Senha" type="password" ng-model="login.password"/><br><p class="assertive" ng-bind="msgErr"></p>',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancelar', type: 'button-assertive' },
+        { text: 'Entrar', type: 'button-balanced',
+        onTap: function (e) {
+          if (!$scope.login || !$scope.login.username || !$scope.login.password) {
+            $scope.msgErr = 'Preencha todos os campos.';
+            e.preventDefault();
+            return;
+          }
+
+          e.preventDefault();
+          $ionicLoading.show({
+            template: 'Autenticando...'
+          });
+
+          $timeout(function() {
+            $ionicLoading.hide();
+            var authenticated = Accounts.auth($scope.login.username, $scope.login.password);
+            if (authenticated) {
+              $window.location.reload(true);
+            } else {
+              $scope.msgErr = 'Usuário ou senha inválidos';
+            }
+
+          }, 2000);
+        }
+      }]
+    })
+  };
+
+  $scope.cadastrar = function () {
+
+  };
+
+  $scope.logout = function () {
+    $ionicLoading.show({
+      template: 'Saindo...'
+    });
+
+    $timeout(function() {
+        $localstorage.setObject('session', {});
+        $localstorage.set('logged', false);
+        $window.location.reload(true);
+    }, 1000);
+  };
 });
