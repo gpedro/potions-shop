@@ -1,3 +1,7 @@
+/* global angular */
+(function() {
+  'use strict';
+
 angular.module('cartExample.controllers', [])
 
 .controller('StoreCtrl', function($scope, Products, $localstorage) {
@@ -19,6 +23,7 @@ angular.module('cartExample.controllers', [])
   });
 
   $scope.cartExists = function (id) {
+    var current = $localstorage.getArray('cart', []);
     var filter = current.filter(function (value) {
       return value.id === id;
     });
@@ -109,14 +114,14 @@ angular.module('cartExample.controllers', [])
   };
 
   $scope.limparCarrinho = function () {
-    var confirmPopup = $ionicPopup.confirm({
+    $ionicPopup.confirm({
       title: 'Carrinho de Compras',
       template: 'Você tem certeza que deseja limpar o carrinho?',
       buttons: [
         { text: 'Cancelar' },
         { text: '<b>Limpar</b>',
         type: 'button-assertive',
-        onTap: function(e) {
+        onTap: function() {
           $localstorage.setObject('cart', []);
           $scope.products = [];
         }
@@ -134,17 +139,17 @@ angular.module('cartExample.controllers', [])
       return;
     }
 
-    var confirmPopup = $ionicPopup.confirm({
+    $ionicPopup.confirm({
       title: 'Finalizar Pedido',
       template: 'Você já é nosso cliente? Faça login ou cadastre-se.',
       buttons: [
         { text: 'Entrar', type: 'button-positive',
-          onTap: function(e) {
+          onTap: function() {
 
           }
         },
         { text: 'Cadastrar', type: 'button-balanced',
-        onTap: function(e) {
+        onTap: function() {
 
         }
       }]
@@ -152,7 +157,7 @@ angular.module('cartExample.controllers', [])
   };
 })
 
-.controller('AccountCtrl', function($scope, $localstorage, $ionicPopup, $window, $timeout, $ionicLoading, Accounts) {
+.controller('AccountCtrl', function($scope, $localstorage, $ionicPopup, $window, $state, $timeout, $ionicLoading, Accounts) {
 
   var isLogged = ($localstorage.get('logged', 'false') == 'true');
 
@@ -166,7 +171,7 @@ angular.module('cartExample.controllers', [])
   $scope.login = {};
   $scope.isLogged = isLogged;
   $scope.entrar = function () {
-    var login = $ionicPopup.confirm({
+    $ionicPopup.confirm({
       title: 'Entrar',
       subTitle: 'Digite seu usuário e senha',
       template: '<input type="text" ng-model="login.username" placeholder="Usuário" required/><br><input required placeholder="Senha" type="password" ng-model="login.password"/><br><p class="assertive" ng-bind="msgErr"></p>',
@@ -198,11 +203,11 @@ angular.module('cartExample.controllers', [])
           }, 2000);
         }
       }]
-    })
+    });
   };
 
   $scope.cadastrar = function () {
-
+    $state.go('tab.signup');
   };
 
   $scope.logout = function () {
@@ -216,4 +221,13 @@ angular.module('cartExample.controllers', [])
         $window.location.reload(true);
     }, 1000);
   };
-});
+})
+.controller('SignupCtrl', ['$scope',
+  function ($scope) {
+    $scope.salvar = function () {
+      console.log($scope.user);
+    };
+  }
+]);
+
+}());

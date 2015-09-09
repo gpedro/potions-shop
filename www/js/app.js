@@ -78,6 +78,16 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
         controller: 'AccountCtrl'
       }
     }
+  })
+
+  .state('tab.signup', {
+    url: '/signup',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/tab-signup.html',
+        controller: 'SignupCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback

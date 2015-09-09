@@ -1,3 +1,6 @@
+/* global angular*/
+(function() {
+  'use strict';
 
 angular.module('cartExample.services', [])
 .factory('Accounts', function ($localstorage) {
@@ -16,6 +19,14 @@ angular.module('cartExample.services', [])
   }];
 
   return {
+    exists: function (column, value) {
+      var accs = accounts.filter(function (obj) {
+        return obj[column] === value;
+      });
+
+      return !!accs.length;
+    },
+
     auth: function (username, password) {
       var accs = accounts.filter(function (value) {
         return value.login == username && value.password == password;
@@ -27,8 +38,6 @@ angular.module('cartExample.services', [])
         $localstorage.setObject('session', acc);
         $localstorage.set('logged', true);
       }
-
-      console.log(accs);
 
       return !!accs.length;
     }
@@ -198,5 +207,7 @@ angular.module('cartExample.services', [])
     getObject: function(key) {
       return JSON.parse($window.localStorage[key] || '{}');
     }
-  }
+  };
 }]);
+
+}());
