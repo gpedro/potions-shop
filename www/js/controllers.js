@@ -222,10 +222,10 @@ angular.module('cartExample.controllers', [])
     }, 1000);
   };
 })
-.controller('SignupCtrl', ['$scope',
-  function ($scope) {
-    $scope.salvar = function () {
-      console.log($scope.user);
+.controller('SignupCtrl', ['$scope', 'Accounts',
+  function ($scope, Accounts) {
+    $scope.salvar = function (obj) {
+      Accounts.signup(obj);
     };
   }
 ]);
