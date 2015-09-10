@@ -1,11 +1,11 @@
 <ion-view view-title="Cadastro Rápido">
   <ion-content>
-    <form novalidate name="user" ng-submit="salvar()">
+    <form novalidate name="user" ng-submit="salvar(user)">
       <div class="list">
         <label class="item item-input item-icon-right item-input-inset">
           <span class="input-label">Nome</span>
-          <input type="text" placeholder="Nome Completo" required name="name" ng-model="name">
-          <i class="icon ion-alert-circled error" ng-show="user.name.$dirty && user.name.$invalid"></i>
+          <input type="text" placeholder="Nome Completo" required name="nome" ng-model="nome">
+          <i class="icon ion-alert-circled error" ng-show="user.nome.$dirty && user.nome.$invalid"></i>
         </label>
         <label class="item item-input item-icon-right item-input-inset">
           <span class="input-label">Usuário</span>
