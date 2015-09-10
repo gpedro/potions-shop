@@ -3,7 +3,7 @@
   'use strict';
 
 angular.module('cartExample.services', [])
-.factory('Accounts', function ($localstorage) {
+.factory('Accounts', function ($localstorage, $ionicPopup) {
   var accounts = [{
     id: 0,
     name: 'Gabriel Pedro',
@@ -18,17 +18,16 @@ angular.module('cartExample.services', [])
     password: '666'
   }];
 
-  return {
-    exists: function (column, value) {
+  function exists (column, value) {
       var accs = accounts.filter(function (obj) {
         return obj[column] === value;
       });
 
       return !!accs.length;
-    },
+  }
 
-    auth: function (username, password) {
-      var accs = accounts.filter(function (value) {
+  function auth (username, password) {
+    var accs = accounts.filter(function (value) {
         return value.login == username && value.password == password;
       });
 
@@ -40,7 +39,30 @@ angular.module('cartExample.services', [])
       }
 
       return !!accs.length;
+  }
+
+  function signup(user) {
+    if (exists('login', user.login)) {
+      $ionicPopup.alert({
+        title: 'Houston',
+        template: 'Login já cadastrado'
+      });
+      return;
     }
+
+    if (exists('email', user.email)) {
+      $ionicPopup.alert({
+        title: 'Houston',
+        template: 'Email já cadastrado'
+      });
+      return;
+    }
+  }
+
+  return {
+    signup: signup,
+    exists: exists,
+    auth: auth
   };
 })
 .factory('Products', function() {
