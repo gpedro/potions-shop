@@ -2,7 +2,7 @@
 Aplicativo para vender potions tibianas.
 
 ### gif-demo
-
+![potion-app demo](http://i.imgur.com/BoJwtcQ.gif)
 ### requirements
 
 * node
