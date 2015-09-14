@@ -9,8 +9,8 @@
   "overrides": {
     "ionic": {
       "main": [
-        "js/ionic.js",
-        "js/ionic-angular.js"
+        "js/ionic.bundle.js",
+        "css/ionic.css"
       ]
     }
   },

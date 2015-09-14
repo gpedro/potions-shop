@@ -51,7 +51,7 @@ gulp.task('build:partials', function() {
       }))
     )
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: 'farmaMobile'
+      module: 'cartExample'
     }))
     .pipe(gulp.dest(paths.tmp + '/partials/'));
 });
