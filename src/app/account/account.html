@@ -1,0 +1,15 @@
+<ion-view view-title="Account">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap" ng-if=" !vm.isLogged ">
+        Você não está logado.
+        <button class="button button-positive button-block" ng-click="vm.entrar()">Entrar</button>
+        <button class="button button-balanced button-block" ng-click="vm.cadastrar()">Cadastre-se</button>
+      </div>
+      <div class="item item-text-wrap" ng-if=" vm.isLogged ">
+        <p>Olá {{ vm.session.nome }}.</p>
+        <button class="button button-assertive button-block" ng-click="vm.logout()">Sair</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

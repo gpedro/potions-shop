@@ -1,0 +1,21 @@
+<ion-view view-title="Entrar">
+  <ion-content>
+    <form novalidate name="login" ng-submit="vm.entrar(auth)">
+      <div class="list">
+        <label class="item item-input item-icon-right item-input-inset">
+          <span class="input-label">Usuário</span>
+          <input type="text" placeholder="Usuário" required ng-model="auth.usuario" name="usuario">
+          <i class="icon ion-alert-circled error" ng-show="login.usuario.$dirty && login.usuario.$invalid"></i>
+        </label>
+        <label class="item item-input item-icon-right item-input-inset">
+          <span class="input-label">Senha</span>
+          <input type="password" placeholder="Senha" required ng-model="auth.senha" name="senha">
+          <i class="icon ion-alert-circled error" ng-show="login.senha.$dirty && login.senha.$invalid"></i>
+        </label>
+        <div class="item">
+          <input type="submit" class="button button-block button-positive" value="Entrar" ng-disabled="!login.$valid">
+        </div>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

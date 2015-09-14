@@ -3,14 +3,14 @@
   'use strict';
 
 angular.module('cartExample.product')
-  .controller('ProductController', [
+  .controller('ProductCtrl', [
     '$rootScope',
     'Products',
     'Cart',
-    ProductController
+    ProductCtrl
   ]);
 
-function ProductController($rootScope, Products, Cart) {
+function ProductCtrl($rootScope, Products, Cart) {
   var vm = this;
   var products = Products.findAll() || [];
   vm.products = products;

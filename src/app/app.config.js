@@ -51,7 +51,7 @@ function AppConfig($stateProvider, $urlRouterProvider) {
     views: {
       'tab-store': {
         templateUrl: 'app/product/product.html',
-        controller: 'ProductController as vm'
+        controller: 'ProductCtrl as vm'
       }
     }
   })
@@ -75,28 +75,33 @@ function AppConfig($stateProvider, $urlRouterProvider) {
       }
     }
   })
-/*
   .state('tab.account', {
     url: '/account',
     views: {
       'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl',
-        controllerAs: 'vm'
+        templateUrl: 'app/account/account.html',
+        controller: 'AccountCtrl as vm'
       }
     }
   })
-
+  .state('tab.login', {
+    url: '/login',
+    views: {
+      'tab-account': {
+        templateUrl: 'app/account/login.html',
+        controller: 'LoginCtrl as vm'
+      }
+    }
+  })
   .state('tab.signup', {
     url: '/signup',
     views: {
       'tab-account': {
-        templateUrl: 'templates/tab-signup.html',
-        controller: 'SignupCtrl',
-        controllerAs: 'vm'
+        templateUrl: 'app/account/signup.html',
+        controller: 'SignupCtrl as vm'
       }
     }
-  })*/;
+  });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/store');

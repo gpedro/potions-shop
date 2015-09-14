@@ -16,13 +16,13 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
   // static db
   var db = [{
     id: 0,
-    name: 'Gabriel Pedro',
+    nome: 'Gabriel Pedro',
     login: 'gpedro',
     email: 'gpedro831@gmail.com',
     password: 'jusolu'
   }, {
     id: 1,
-    name: 'Rayssa Monteiro',
+    nome: 'Rayssa Monteiro',
     login: 'rayssa',
     email: 'rayssamonteiro92@gmail.com',
     password: '666'
@@ -37,6 +37,10 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
   }
 
   function signup (user) {
+    $ionicLoading.show({
+      template: 'Carregando...'
+    });
+
     var deferred = $q.defer();
     var msg = [];
     if (!user.nome) {
@@ -46,18 +50,18 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
     if (!user.login) {
       msg.push('Campo login deve ser preenchido.');
     } else {
-      var isUnique = exists('login', user.login);
-      if (!isUnique) {
-        msg.push('Usuário já cadastrado.');
+      var isUniqueLogin = !exists('login', user.login);
+      if (!isUniqueLogin) {
+        msg.push('Usuário já está sendo utilizado.');
       }
     }
 
     if (!user.email) {
       msg.push('Campo email deve ser preenchido.');
     } else {
-      var isUnique = exists('email', user.email);
-      if (!isUnique) {
-        msg.push('Email já cadastrado.');
+      var isUniqueEmail = !exists('email', user.email);
+      if (!isUniqueEmail) {
+        msg.push('Email já está sendo utilizado.');
       }
     }
 
@@ -65,26 +69,26 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
       msg.push('Campo senha deve ser preenchido.');
     }
 
-    if (!msg.length) {
-      user.id = db.length + 1;
-      db.push(user);
-      deferred.resolve('Cadastro realizado com sucesso.');
-    } else {
-      deferred.reject(msg);
-    }
-
-    $ionicLoading.show({
-      template: 'Carregando...'
-    });
-
     $timeout(function () {
       $ionicLoading.hide();
+
+      if (!msg.length) {
+        user.id = db.length + 1;
+        db.push(user);
+        deferred.resolve('Cadastro realizado com sucesso.');
+      } else {
+        deferred.reject(msg);
+      }
     }, 2000);
 
     return deferred.promise;
   }
 
   function login (username, password) {
+    $ionicLoading.show({
+      template: 'Carregando...'
+    });
+    var deferred = $q.defer();
     var result = db.filter(function (value) {
       return value.login == username && value.password == password;
     });
@@ -97,25 +101,22 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
       $localstorage.set('logged', true);
     }
 
-    $ionicLoading.show({
-      template: 'Carregando...'
-    });
+    var logged = !!count;
 
     $timeout(function () {
       $ionicLoading.hide();
-    }, 2000);
+      if (logged) {
+        $rootScope.$emit('login');
+        deferred.resolve();
+      } else {
+        deferred.reject('Usuário ou senha inválidos.');
+      }
+    }, 1000);
 
-    var logged = !!count;
-
-    if (logged) {
-      $rootScope.$emit('userLogged');
-    }
-
-    return logged;
+    return deferred.promise;
   }
 
   function logout() {
-    $rootScope.$emit('userLogout');
 
     $ionicLoading.show({
       template: 'Carregando...'
@@ -125,6 +126,7 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
       $localstorage.setObject('session', {});
       $localstorage.set('logged', false);
       $ionicLoading.hide();
+      $rootScope.$emit('logout');
     }, 2000);
   }
 
@@ -132,11 +134,18 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
     return $localstorage.get('logged', 'false') === 'true';
   }
 
+  function currentUser() {
+    if (isLogged()) {
+      return $localstorage.getObject('session');
+    }
+  }
+
   return {
     signup: signup,
     login: login,
     logout: logout,
-    isLogged: isLogged
+    isLogged: isLogged,
+    user: currentUser
   };
 }
 

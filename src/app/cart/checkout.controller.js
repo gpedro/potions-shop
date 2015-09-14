@@ -6,10 +6,10 @@ angular.module('cartExample.cart')
   .controller('CheckoutCtrl', [
     '$rootScope',
     'Cart',
-    CheckoutController
+    CheckoutCtrl
   ]);
 
-function CheckoutController($rootScope, Cart) {
+function CheckoutCtrl($rootScope, Cart) {
   var vm = this;
   var products = Cart.all();
   vm.products = products;
