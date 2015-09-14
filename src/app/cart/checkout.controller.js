@@ -5,11 +5,14 @@
 angular.module('cartExample.cart')
   .controller('CheckoutCtrl', [
     '$rootScope',
+    '$ionicPopup',
+    '$state',
     'Cart',
+    'Accounts',
     CheckoutCtrl
   ]);
 
-function CheckoutCtrl($rootScope, Cart) {
+function CheckoutCtrl($rootScope, $ionicPopup, $state, Cart, Accounts) {
   var vm = this;
   var products = Cart.all();
   vm.products = products;
@@ -26,6 +29,18 @@ function CheckoutCtrl($rootScope, Cart) {
 
   vm.limparCarrinho = function () {
     Cart.reset();
+  };
+
+  vm.finalizarPedido = function () {
+    if (Accounts.isLogged()) {
+      //
+    } else {
+      $ionicPopup.alert({
+        title: 'Autenticação necessária',
+        subTitle: 'Para continuar é necessário estar logado'
+      });
+      $state.go('tab.login');
+    }
   };
 
   $rootScope.$on('cartAdded', function () {

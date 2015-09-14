@@ -20,7 +20,7 @@
     </ion-list>
     <div class="button-bar">
       <a class="button button-assertive" ng-click="vm.limparCarrinho()">Limpar Carrinho</a>
-      <a class="button button-balanced" ng-click="vm.finalizarPedido()">Finalizar Pedido</a>
+      <a class="button button-balanced" ng-click="vm.finalizarPedido()" ng-disabled="vm.products.length === 0">Finalizar Pedido</a>
     </div>
   </ion-content>
 </ion-view>

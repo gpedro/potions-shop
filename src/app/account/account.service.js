@@ -36,7 +36,8 @@ function AccountService($localstorage, $ionicLoading, $timeout, $rootScope, $q) 
     return !!accs.length;
   }
 
-  function signup (user) {
+  function signup (cred) {
+    var user = angular.copy(cred);
     $ionicLoading.show({
       template: 'Carregando...'
     });
