@@ -1,13 +1,19 @@
-// Ionic Starter App
+/* global angular, cordova, StatusBar */
+(function() {
+  'use strict';
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.services'])
+angular.module('cartExample')
+  .run([
+    '$ionicPlatform',
+    AppRun
+  ])
+  .config([
+    '$stateProvider',
+    '$urlRouterProvider',
+    AppConfig
+  ]);
 
-.run(function($ionicPlatform) {
+function AppRun($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -21,9 +27,9 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
       StatusBar.styleLightContent();
     }
   });
-})
+}
 
-.config(function($stateProvider, $urlRouterProvider) {
+function AppConfig($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -35,7 +41,7 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
     .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'app/app.html'
   })
 
   // Each tab has its own nav history stack:
@@ -44,8 +50,8 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
     url: '/store',
     views: {
       'tab-store': {
-        templateUrl: 'templates/tab-store.html',
-        controller: 'StoreCtrl'
+        templateUrl: 'app/product/product.html',
+        controller: 'ProductController as vm'
       }
     }
   })
@@ -54,8 +60,8 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
     url: '/store/:productId',
     views: {
       'tab-store': {
-        templateUrl: 'templates/product.html',
-        controller: 'ProductDetailCtrl'
+        templateUrl: 'app/product/details.html',
+        controller: 'ProductDetailCtrl as vm'
       }
     }
   })
@@ -64,18 +70,19 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
     url: '/checkout',
     views: {
       'tab-checkout': {
-        templateUrl: 'templates/checkout.html',
-        controller: 'CheckoutCtrl'
+        templateUrl: 'app/cart/checkout.html',
+        controller: 'CheckoutCtrl as vm'
       }
     }
   })
-
+/*
   .state('tab.account', {
     url: '/account',
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        controllerAs: 'vm'
       }
     }
   })
@@ -85,12 +92,15 @@ angular.module('cartExample', ['ionic', 'cartExample.controllers', 'cartExample.
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-signup.html',
-        controller: 'SignupCtrl'
+        controller: 'SignupCtrl',
+        controllerAs: 'vm'
       }
     }
-  });
+  })*/;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/store');
 
-});
+}
+
+}());

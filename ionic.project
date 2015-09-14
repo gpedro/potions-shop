@@ -1,4 +1,8 @@
 {
   "name": "cart-app",
-  "app_id": ""
+  "app_id": "",
+  "watchPatterns": [
+    "www/**/*",
+    "!www/bower_components/**/*"
+  ]
 }

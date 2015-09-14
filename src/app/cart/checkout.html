@@ -1,12 +1,12 @@
 <ion-view view-title="Carrinho">
   <ion-content>
     <ion-list can-swipe="true">
-      <ion-item ng-if="products.length === 0">
+      <ion-item ng-if="vm.products.length === 0">
         <h2 class="positive">Nenhum item no carrinho.</h2>
       </ion-item>
-      <ion-item ng-repeat="product in products track by product.id"
+      <ion-item ng-repeat="product in vm.products track by product.id"
             class="item-avatar item-text-wrap">
-        <img ng-src="img/products/{{ product.image_name }}.gif" >
+        <img ng-src="assets/img/products/{{ product.image_name }}.gif" >
         <h2>{{ product.quantity || 1 }}x {{ product.name }}</h2>
         <p>{{ product.excerpt }}</p>
         <span class="badge badge-balanced">{{ ((product.quantity || 1) * product.price) || 0 }} gp</span>
@@ -15,12 +15,12 @@
 
       <ion-item>
         Valor Total
-        <span class="badge badge-assertive">{{ getValorTotal() || 0 }} gp</span>
+        <span class="badge badge-assertive">{{ vm.getValorTotal() || 0 }} gp</span>
       </ion-item>
     </ion-list>
     <div class="button-bar">
-      <a class="button button-assertive" ng-click="limparCarrinho()">Limpar Carrinho</a>
-      <a class="button button-balanced" ng-click="finalizarPedido()">Finalizar Pedido</a>
+      <a class="button button-assertive" ng-click="vm.limparCarrinho()">Limpar Carrinho</a>
+      <a class="button button-balanced" ng-click="vm.finalizarPedido()">Finalizar Pedido</a>
     </div>
   </ion-content>
 </ion-view>

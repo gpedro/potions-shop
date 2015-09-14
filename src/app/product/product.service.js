@@ -1,71 +1,14 @@
-/* global angular*/
+/* global angular */
 (function() {
   'use strict';
 
-angular.module('cartExample.services', [])
-.factory('Accounts', function ($localstorage, $ionicPopup) {
-  var accounts = [{
-    id: 0,
-    name: 'Gabriel Pedro',
-    login: 'gpedro',
-    email: 'gpedro831@gmail.com',
-    password: 'jusolu'
-  }, {
-    id: 1,
-    name: 'Rayssa Monteiro',
-    login: 'rayssa',
-    email: 'rayssamonteiro92@gmail.com',
-    password: '666'
-  }];
+angular.module('cartExample.product')
+  .factory('Products', [
+    '$localstorage',
+    ProductService
+  ]);
 
-  function exists (column, value) {
-      var accs = accounts.filter(function (obj) {
-        return obj[column] === value;
-      });
-
-      return !!accs.length;
-  }
-
-  function auth (username, password) {
-    var accs = accounts.filter(function (value) {
-        return value.login == username && value.password == password;
-      });
-
-      if (accs.length) {
-        var acc = accs[0];
-        delete acc.password;
-        $localstorage.setObject('session', acc);
-        $localstorage.set('logged', true);
-      }
-
-      return !!accs.length;
-  }
-
-  function signup(user) {
-    if (exists('login', user.login)) {
-      $ionicPopup.alert({
-        title: 'Houston',
-        template: 'Login já cadastrado'
-      });
-      return;
-    }
-
-    if (exists('email', user.email)) {
-      $ionicPopup.alert({
-        title: 'Houston',
-        template: 'Email já cadastrado'
-      });
-      return;
-    }
-  }
-
-  return {
-    signup: signup,
-    exists: exists,
-    auth: auth
-  };
-})
-.factory('Products', function() {
+function ProductService($localstorage) {
 
   var potions = [{
       'id': 0,
@@ -193,43 +136,43 @@ angular.module('cartExample.services', [])
     }
   ];
 
-  return {
-    all: function () {
-      return potions;
-    },
-    get: function (id) {
-      var potion;
-      potions.forEach(function (pot) {
-        if (pot.id === ~~id) {
-          potion = pot;
-          return;
-        }
-      });
+  function cartExists(id) {
+    var cart = $localstorage.getArray('cart', []);
 
-      if (potion) {
-        return potion;
-      }
+    var search = cart.filter(function (value) {
+      return value.id === id;
+    });
+
+    return !!search.length;
+  }
+
+  function findAll() {
+    var result = [];
+    potions.forEach(function (potion) {
+      potion.cart = cartExists(potion.id);
+      result.push(potion);
+    });
+
+    return result;
+  }
+
+  function findOne(id) {
+    var result = potions.filter(function (potion) {
+      return potion.id === ~~id;
+    });
+
+    if (result.length) {
+      var potion = result[0];
+      potion.cart = cartExists(potion.id);
+
+      return potion;
     }
-  };
-})
-.factory('$localstorage', ['$window', function($window) {
+  }
+
   return {
-    set: function(key, value) {
-      $window.localStorage[key] = value;
-    },
-    get: function(key, defaultValue) {
-      return $window.localStorage[key] || defaultValue;
-    },
-    getArray: function(key) {
-      return JSON.parse($window.localStorage[key]  || '[]');
-    },
-    setObject: function(key, value) {
-      $window.localStorage[key] = JSON.stringify(value);
-    },
-    getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
-    }
+    findAll: findAll,
+    findOne: findOne
   };
-}]);
+}
 
 }());

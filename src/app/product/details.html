@@ -1,0 +1,39 @@
+<ion-view view-title="{{ vm.product.name }}">
+  <ion-content class="padding">
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img ng-src="assets/img/products/{{ vm.product.image_name }}.gif">
+        <h2>{{ vm.product.name }}</h2>
+        <p>{{ vm.product.vocations.join(', ') }}</p>
+      </div>
+
+      <div class="item">
+        Descrição
+        <p>{{ vm.product.excerpt }}</p>
+      </div>
+
+      <div class="item">
+        Level Mínimo
+        <p>{{ vm.product.minLevel }}</p>
+      </div>
+
+      <div class="item">
+        Peso
+        <p>{{ vm.product.weight || 0 }} oz</p>
+      </div>
+
+      <div class="item">
+        Preço
+        <p>{{ vm.product.price }} gp</p>
+      </div>
+
+    </div>
+
+    <button ng-click="vm.toggleCart(vm.product.id)" ng-class="{'button-assertive': vm.product.cart, 'button-balanced': !vm.product.cart }" class="button button-block">
+      <i class="icon" ng-class="{'ion-plus-circled': !vm.product.cart, 'ion-close-circled': vm.product.cart }"></i>&nbsp;
+      <span ng-if="vm.product.cart">Remover do Carrinho</span>
+      <span ng-if="!vm.product.cart">Adicionar ao Carrinho</span>
+    </button>
+  </ion-content>
+</ion-view>

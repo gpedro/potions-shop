@@ -1,9 +1,9 @@
 <ion-view view-title="Loja">
   <ion-content>
-      <div class="list card" ng-repeat="product in ::products track by product.id">
+      <div class="list card" ng-repeat="product in ::vm.products track by product.id">
 
         <div class="item item-avatar">
-          <img ng-src="img/products/{{ product.image_name }}.gif">
+          <img ng-src="assets/img/products/{{ product.image_name }}.gif">
           <h2>{{ product.name }}</h2>
           <h4>{{ product.price }} gp</h4>
         </div>
@@ -17,7 +17,7 @@
             <i class="icon ion-information-circled"></i>
             Detalhes
           </a>
-          <a ng-click="toggleCart(product)"class="tab-item" >
+          <a ng-click="vm.toggleCart(product.id)"class="tab-item" >
             <i class="icon" ng-class="{'ion-plus-circled': !product.cart, 'ion-close-circled': product.cart, assertive: product.cart, balanced: !product.cart }" ></i>
             <span ng-if="product.cart">Remover do Carrinho</span>
             <span ng-if="!product.cart">Adicionar ao Carrinho</span>
