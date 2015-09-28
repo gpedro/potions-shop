@@ -3,6 +3,7 @@
   "private": "true",
   "dependencies": {
     "ionic": "driftyco/ionic-bower#1.1.0",
+    "Ionicons": "ionicons#~2.0.1",
     "ngSweetAlert": "angular-sweetalert#~1.1.0",
     "sweetalert": "~1.1.0"
   },

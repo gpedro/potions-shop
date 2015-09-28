@@ -6,7 +6,7 @@
       </ion-item>
       <ion-item ng-repeat="product in vm.products track by product.id"
             class="item-avatar item-text-wrap">
-        <img ng-src="assets/img/products/{{ product.image_name }}.gif" >
+        <img ng-src="assets/images/products/{{ product.image_name }}.gif" >
         <h2>{{ product.quantity || 1 }}x {{ product.name }}</h2>
         <p>{{ product.excerpt }}</p>
         <span class="badge badge-balanced">{{ ((product.quantity || 1) * product.price) || 0 }} gp</span>
